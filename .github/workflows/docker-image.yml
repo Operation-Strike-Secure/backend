@@ -22,17 +22,13 @@ jobs:
       if: steps.check_branch.outputs.branch == 'refs/heads/dev'
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        docker build -t ghcr.io/Operation-Strike-Secure/backend:dev .
-        docker push ghcr.io/Operation-Strike-Secure/backend:dev
         tag=$(date +%s)
-        docker build -t ghcr.io/Operation-Strike-Secure/backend:${tag} .
-        docker push ghcr.io/Operation-Strike-Secure/backend:${tag}
+        docker build -t ghcr.io/operation-strike-secure/backend:${tag} .
+        docker push ghcr.io/operation-strike-secure/backend:${tag}
 
     - name: Build and push Docker image for main branch
       if: steps.check_branch.outputs.branch == 'refs/heads/main'
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        docker build -t ghcr.io/Operation-Strike-Secure/backend:main .
-        docker push ghcr.io/Operation-Strike-Secure/backend:main
-        docker build -t ghcr.io/Operation-Strike-Secure/backend:latest .
-        docker push ghcr.io/Operation-Strike-Secure/backend:latest
+        docker build -t ghcr.io/operation-strike-secure/backend:latest .
+        docker push ghcr.io/operation-strike-secure/backend:latest
