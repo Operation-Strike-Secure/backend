@@ -4,10 +4,13 @@ services:
     build: .
     ports:
       - "8080:8080"
+    restart: always
     environment:
       - DATABASE_USER=${POSTGRES_USER}
       - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
       - DATABASE_NAME=${POSTGRES_DB}
+      - DATABASE_HOST=${POSTGRES_HOST}
+      - DATABASE_PORT=${POSTGRES_PORT}
     depends_on:
       - db
 
@@ -15,6 +18,7 @@ services:
     image: postgres:15
     volumes:
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+    restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
