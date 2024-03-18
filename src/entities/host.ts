@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
 import { stateGame } from '../host/api/domain'
 
-@Entity()
+@Entity({ name: 'host' })
 export class HostEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
     id: number
@@ -20,7 +20,4 @@ export class HostEntity extends BaseEntity {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    last_connection: Date
 }

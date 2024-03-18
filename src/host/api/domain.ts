@@ -2,15 +2,18 @@ export enum stateGame {
   CREATED = 'CREATED',
   STARTED = 'STARTED',
   ENDED = 'ENDED',
+  UNKNOWN = 'UNKNOWN'
 }
 
 export interface dataUsers {
+  id?: number
   ip: string
   created_at: Date
-  last_connection: Date
+  last_connection?: Date
 }
 
 export interface dataHost {
+  id?: number
   ip: string
   name?: string
   nb_players?: number

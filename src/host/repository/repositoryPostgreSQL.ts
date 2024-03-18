@@ -37,23 +37,6 @@ export class RepositoryPostgreSQL implements RepositoryHost {
     const repository = this.db.getRepository(table === 'host' ? HostEntity : UserEntity)
     const result = await repository.find()
     if (result.length === 0) return { data: undefined, message: 'No data found' }
-    // return result.map((row: any) => {
-    //   if (table === 'host') {
-    //     return {
-    //       ip: row.ip,
-    //       name: row.name,
-    //       nb_players: row.nb_players,
-    //       state: row.state,
-    //       created_at: row.created_at
-    //     }
-    //   } else {
-    //     return {
-    //       ip: row.ip,
-    //       created_at: row.created_at,
-    //       last_connection: row.last_connection
-    //     }
-    //   }
-    // })
     return { data: result, message: 'Data found' }
   }
 
@@ -65,7 +48,7 @@ export class RepositoryPostgreSQL implements RepositoryHost {
 
   async updateHost (host: dataHost): Promise<ResponseData> {
     const repository = this.db.getRepository(HostEntity)
-    await repository.update({ ip: host.ip }, host)
+    await repository.update({ id: host.id }, host)
     return { data: host, message: 'Host updated' }
   }
 

@@ -8,8 +8,8 @@
     "build": "tsc",
     "start": "ts-node src/server.ts",
     "test": "jest --verbose --detectOpenHandles --forceExit --colors --coverage --coverageProvider=v8",
-    "lint": "eslint --ext .ts src config",
-    "lint:fix": "eslint --ext .ts src config --fix"
+    "lint": "eslint --ext .ts src config tests",
+    "lint:fix": "eslint --ext .ts src config tests --fix"
   },
   "keywords": [],
   "author": "",
