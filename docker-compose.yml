@@ -13,9 +13,14 @@ services:
       - DATABASE_PORT=${POSTGRES_PORT}
     depends_on:
       - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   db:
-    image: postgres:15
+    image: postgres:16
     volumes:
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql
     restart: always

@@ -1,5 +1,5 @@
 import { convertEnumStateGame } from '../../utils/convert'
-import { stateGame, type RepositoryHost, type dataHost, type dataUsers } from './domain'
+import { host_state_enum, type RepositoryHost, type dataHost, type dataUsers } from './domain'
 
 export async function resolverGetListTableHost (database: RepositoryHost): Promise<dataHost[] | undefined> {
   const result = await database.getListTable('host')
@@ -11,7 +11,7 @@ export async function resolverInsertHost (database: RepositoryHost, host: dataHo
   const getHost = await database.getListTable('host')
   const hostList = getHost.data as dataHost[] | undefined
   if (hostList !== undefined) {
-    const hostExist = hostList.find((hostItem) => hostItem.ip === host.ip && (hostItem.state === host.state || hostItem.state === stateGame.STARTED || hostItem.state === stateGame.CREATED))
+    const hostExist = hostList.find((hostItem) => hostItem.ip === host.ip && (hostItem.state === host.state || hostItem.state === host_state_enum.STARTED || hostItem.state === host_state_enum.CREATED))
     if (hostExist !== undefined) {
       return undefined
     }
@@ -36,13 +36,13 @@ export async function resolverInsertHost (database: RepositoryHost, host: dataHo
   return result.data as dataHost | undefined
 }
 
-export async function resolverUpdateHostState (database: RepositoryHost, host: { ip: string, state: stateGame }): Promise<dataHost | undefined> {
+export async function resolverUpdateHostState (database: RepositoryHost, host: { ip: string, state: host_state_enum }): Promise<dataHost | undefined> {
   const result = await database.getListTable('host')
   const hostList = result.data as dataHost[] | undefined
   if (hostList === undefined) {
     return undefined
   }
-  const hostToUpdate = hostList.find((hostItem) => hostItem.ip === host.ip && hostItem.state !== stateGame.ENDED)
+  const hostToUpdate = hostList.find((hostItem) => hostItem.ip === host.ip && hostItem.state !== host_state_enum.ENDED)
   if (hostToUpdate === undefined) {
     return undefined
   }

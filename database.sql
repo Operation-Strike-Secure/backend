@@ -1,4 +1,5 @@
-CREATE TYPE IF NOT EXISTS stateGame AS ENUM ('CREATED', 'STARTED', 'ENDED');
+CREATE TYPE stateGame AS ENUM ('CREATED', 'STARTED', 'ENDED', 'UNKNOWN');
+ALTER TYPE public.stateGame RENAME TO host_state_enum;
 
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
@@ -12,6 +13,6 @@ CREATE TABLE IF NOT EXISTS host (
   ip text NOT NULL,
   name text NOT NULL,
   nb_players integer NOT NULL,
-  state stateGame DEFAULT 'CREATED',
+  state host_state_enum DEFAULT 'CREATED',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

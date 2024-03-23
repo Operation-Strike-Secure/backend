@@ -1,4 +1,4 @@
-export enum stateGame {
+export enum host_state_enum {
   CREATED = 'CREATED',
   STARTED = 'STARTED',
   ENDED = 'ENDED',
@@ -17,7 +17,7 @@ export interface dataHost {
   ip: string
   name?: string
   nb_players?: number
-  state?: stateGame
+  state?: host_state_enum
   created_at: Date
 }
 

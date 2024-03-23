@@ -2,7 +2,7 @@ import express from 'express'
 import { configDatabase } from '../../../config/envConfig'
 import { resolverInsertHost, resolverUpdateHostState } from '../api/resolver'
 import { RepositoryPostgreSQL } from '../repository/repositoryPostgreSQL'
-import { stateGame } from '../api/domain'
+import { host_state_enum } from '../api/domain'
 
 const routerPostHost = express.Router()
 const database = new RepositoryPostgreSQL(configDatabase.Postgres)
@@ -70,7 +70,7 @@ const database = new RepositoryPostgreSQL(configDatabase.Postgres)
  */
 routerPostHost.post('/addhost', (req: express.Request, res: express.Response) => {
   const { ip, name } = req.body
-  const host = { ip, name, nb_players: 1, state: stateGame.CREATED, created_at: new Date() }
+  const host = { ip, name, nb_players: 1, state: host_state_enum.CREATED, created_at: new Date() }
   resolverInsertHost(database, host).then((result) => {
     if (result === undefined) {
       res.status(500).send('Error inserting data')

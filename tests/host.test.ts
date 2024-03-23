@@ -1,4 +1,4 @@
-import { stateGame } from '../src/host/api/domain'
+import { host_state_enum } from '../src/host/api/domain'
 import { resolverGetListTableHost, resolverInsertHost, resolverUpdateHostState } from '../src/host/api/resolver'
 import { convertEnumStateGame } from '../src/utils/convert'
 
@@ -96,10 +96,10 @@ const templateResolverHost = {
 
 describe('Handling host game', () => {
   test('Convert enum state game', () => {
-    expect(convertEnumStateGame('CREATED')).toEqual(stateGame.CREATED)
-    expect(convertEnumStateGame('STARTED')).toEqual(stateGame.STARTED)
-    expect(convertEnumStateGame('ENDED')).toEqual(stateGame.ENDED)
-    expect(convertEnumStateGame('')).toEqual(stateGame.UNKNOWN)
+    expect(convertEnumStateGame('CREATED')).toEqual(host_state_enum.CREATED)
+    expect(convertEnumStateGame('STARTED')).toEqual(host_state_enum.STARTED)
+    expect(convertEnumStateGame('ENDED')).toEqual(host_state_enum.ENDED)
+    expect(convertEnumStateGame('')).toEqual(host_state_enum.UNKNOWN)
   })
 
   test('Get list of host', async () => {
@@ -141,7 +141,7 @@ describe('Handling host game', () => {
             ip: '127.0.10.1',
             name: 'Test',
             nb_players: 1,
-            state: stateGame.CREATED,
+            state: host_state_enum.CREATED,
             created_at: date
           },
           message: 'Data inserted'
@@ -153,7 +153,7 @@ describe('Handling host game', () => {
       ip: '127.0.10.1',
       name: 'Test',
       nb_players: 1,
-      state: stateGame.CREATED,
+      state: host_state_enum.CREATED,
       created_at: date
     })
     expect(result).toEqual({
@@ -180,7 +180,7 @@ describe('Handling host game', () => {
       ip: '127.0.10.1',
       name: 'Test',
       nb_players: 1,
-      state: stateGame.CREATED,
+      state: host_state_enum.CREATED,
       created_at: date
     })
     expect(result).toEqual(undefined)
@@ -196,7 +196,7 @@ describe('Handling host game', () => {
             ip: '127.0.0.1',
             name: 'Test',
             nb_players: 1,
-            state: stateGame.STARTED,
+            state: host_state_enum.STARTED,
             created_at: date
           },
           message: 'Data updated'
@@ -205,7 +205,7 @@ describe('Handling host game', () => {
     }
     const result = await resolverUpdateHostState(RepositoryHost as any, {
       ip: '127.0.0.1',
-      state: stateGame.STARTED
+      state: host_state_enum.STARTED
     })
     expect(result).toEqual({
       id: 1,
@@ -229,7 +229,7 @@ describe('Handling host game', () => {
     }
     const result = await resolverUpdateHostState(RepositoryHost as any, {
       ip: '127.0.0.1',
-      state: stateGame.STARTED
+      state: host_state_enum.STARTED
     })
     expect(result).toEqual(undefined)
   })
@@ -244,7 +244,7 @@ describe('Handling host game', () => {
             ip: '127.0.0.1',
             name: 'Test',
             nb_players: 1,
-            state: stateGame.ENDED,
+            state: host_state_enum.ENDED,
             created_at: date
           },
           message: 'Data updated'
@@ -253,7 +253,7 @@ describe('Handling host game', () => {
     }
     const result = await resolverUpdateHostState(RepositoryHost as any, {
       ip: '127.0.0.1',
-      state: stateGame.ENDED
+      state: host_state_enum.ENDED
     })
     expect(result).toEqual({
       id: 1,
@@ -274,7 +274,7 @@ describe('Handling host game', () => {
             ip: '127.0.0.1',
             name: 'Test',
             nb_players: 1,
-            state: stateGame.CREATED,
+            state: host_state_enum.CREATED,
             created_at: date
           }],
           message: 'Data not found'
@@ -285,7 +285,7 @@ describe('Handling host game', () => {
       ip: '127.0.0.1',
       name: 'Test',
       nb_players: 1,
-      state: stateGame.CREATED,
+      state: host_state_enum.CREATED,
       created_at: date
     })
     expect(result).toEqual(undefined)
@@ -309,7 +309,7 @@ describe('Handling host game', () => {
       ip: '127.0.0.1',
       name: 'Test',
       nb_players: 1,
-      state: stateGame.CREATED,
+      state: host_state_enum.CREATED,
       created_at: date
     })
     expect(result).toEqual({
@@ -336,7 +336,7 @@ describe('Handling host game', () => {
       ip: '127.0.0.1',
       name: 'Test',
       nb_players: 1,
-      state: stateGame.CREATED,
+      state: host_state_enum.CREATED,
       created_at: date
     })
     expect(result).toEqual({
@@ -361,7 +361,7 @@ describe('Handling host game', () => {
     }
     const result = await resolverUpdateHostState(RepositoryHost as any, {
       ip: '127.0.0.1',
-      state: stateGame.STARTED
+      state: host_state_enum.STARTED
     })
     expect(result).toEqual(undefined)
   })
@@ -375,7 +375,7 @@ describe('Handling host game', () => {
             ip: '127.0.0.1',
             name: 'Test',
             nb_players: 1,
-            state: stateGame.ENDED,
+            state: host_state_enum.ENDED,
             created_at: date
           }],
           message: 'Data found'
@@ -384,7 +384,7 @@ describe('Handling host game', () => {
     }
     const result = await resolverUpdateHostState(RepositoryHost as any, {
       ip: '127.0.0.1',
-      state: stateGame.STARTED
+      state: host_state_enum.STARTED
     })
     expect(result).toEqual(undefined)
   })
