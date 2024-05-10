@@ -16,3 +16,18 @@ CREATE TABLE IF NOT EXISTS host (
   state host_state_enum DEFAULT 'CREATED',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS ticket (
+  id SERIAL PRIMARY KEY,
+  title text NOT NULL,
+  message text NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  state BOOLEAN DEFAULT TRUE
+)
+
+CREATE TABLE IF NOT EXISTS response (
+  id SERIAL PRIMARY KEY,
+  message text NOT NULL,
+  ticket_id integer NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
