@@ -50,3 +50,38 @@ export async function resolverUpdateHostState (database: RepositoryHost, host: {
   const resultUpdate = await database.updateHost(hostToUpdate)
   return resultUpdate.data as dataHost | undefined
 }
+
+export async function resolverGetIdUser(database: RepositoryHost): Promise<{nb_players: number, nb_players_week: number} | undefined>  {
+  const result = await database.getListTable('users')
+  let userList = result.data as dataUsers[] | undefined
+  const date = new Date()
+
+  const endDate = new Date();
+  const startDate = new Date(endDate.getTime() - (7 * 24 * 60 * 60 * 1000));
+
+  if (!userList || userList.length === 0) {
+    return undefined
+  }
+  const recentUsers = userList.filter(user => {
+    const createdAt = new Date(user.created_at);
+    return createdAt >= startDate && createdAt < endDate;
+  });
+
+  return {nb_players: userList.length, nb_players_week: recentUsers.length}
+}
+
+export async function resolverGetNumberParty(database: RepositoryHost): Promise<{nb_party: number, nb_party_ended: number} | undefined>  {
+  const result = await database.getListTable('host')
+  let hostList = result.data as dataHost[] | undefined
+
+  if (!hostList || hostList.length === 0) {
+    return undefined
+  }
+
+  const hostPartiesEnded = hostList.filter((hostItem) => hostItem.state == host_state_enum.ENDED);
+  if (hostPartiesEnded.length === 0) {
+    return undefined;
+  }
+
+  return {nb_party: hostList.length, nb_party_ended: hostPartiesEnded.length};
+}

@@ -1,7 +1,9 @@
 import express from 'express'
 import { configDatabase } from '../../../config/envConfig'
 import { type dataHost } from '../api/domain'
-import { resolverGetListTableHost } from '../api/resolver'
+import { type dataUsers } from '../api/domain'
+import { resolverGetIdUser, resolverGetListTableHost } from '../api/resolver'
+import { resolverGetNumberParty } from '../api/resolver'
 import { RepositoryPostgreSQL } from '../repository/repositoryPostgreSQL'
 
 const routerGetHost = express.Router()
@@ -66,6 +68,30 @@ const database = new RepositoryPostgreSQL(configDatabase.Postgres)
  */
 routerGetHost.get('/gethostlist', (req: express.Request, res: express.Response) => {
   resolverGetListTableHost(database).then((result: dataHost[] | undefined) => {
+    if (result === undefined) {
+      res.status(404).send('No data found')
+    } else {
+      res.status(200).json(result)
+    }
+  }).catch((error) => {
+    res.status(500).send(error)
+  })
+})
+
+routerGetHost.get('/getUserId', (req: express.Request, res: express.Response) => {
+  resolverGetIdUser(database).then((result:{nb_players: number, nb_players_week: number} | undefined) => {
+    if (result === undefined) {
+      res.status(404).send('No data found')
+    } else {
+      res.status(200).json(result)
+    }
+  }).catch((error) => {
+    res.status(500).send(error)
+  })
+})
+
+routerGetHost.get('/getNumberParty', (req: express.Request, res: express.Response) => {
+  resolverGetNumberParty(database).then((result:{nb_party: number, nb_party_ended: number} | undefined) => {
     if (result === undefined) {
       res.status(404).send('No data found')
     } else {
