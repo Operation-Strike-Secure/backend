@@ -21,6 +21,10 @@ export async function resolverUpdateState(database: RepositoryTicket, id: number
 }
 
 export async function resolverResponseTicket(database: RepositoryTicket, id: number, message: string): Promise<any[] | undefined> {
+    const ticket_list = await database.get('ticket')
+    const temp = ticket_list.filter((res: any) => res.id == id)
+    if (temp.state == "false")
+        return undefined
     const result = await database.response_ticket(id, message)
     return result
 }
