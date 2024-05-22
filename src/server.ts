@@ -3,6 +3,9 @@ import express from 'express'
 import { swagger } from './documentaion'
 import routerGetHost from './host/routes/routesGet'
 import routerPostHost from './host/routes/routesPost'
+import routerGetTicket from './ticket/routes/routesGet'
+import routerPostTicket from './ticket/routes/routesPost'
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
 
@@ -14,6 +17,8 @@ app.use('/docs', swagger.serve, swagger.setup)
 
 app.use('/api', routerGetHost)
 app.use('/api', routerPostHost)
+app.use('/api', routerGetTicket)
+app.use('/api', routerPostTicket)
 
 app.listen(8080, () => {
   console.log('Server is running on port 8080')
