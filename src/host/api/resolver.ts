@@ -18,7 +18,7 @@ export async function resolverInsertHost (database: RepositoryHost, host: dataHo
   }
   const result = await database.insertHost(host)
   // check if the user exists
-  const getUsers = await database.getListTable('users')
+  const getUsers = await database.getListTable('player')
   const userList = getUsers.data as dataUsers[] | undefined
   if (userList !== undefined) {
     const userExist = userList.find((userItem) => userItem.ip === host.ip)
@@ -52,7 +52,7 @@ export async function resolverUpdateHostState (database: RepositoryHost, host: {
 }
 
 export async function resolverGetIdUser(database: RepositoryHost): Promise<{nb_players: number, nb_players_week: number} | undefined>  {
-  const result = await database.getListTable('users')
+  const result = await database.getListTable('player')
   let userList = result.data as dataUsers[] | undefined
   const date = new Date()
 

@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { HostEntity } from '../../entities/host'
-import { UserEntity } from '../../entities/users'
+import { PlayerEntity } from '../../entities/player'
 import { type ResponseData, type RepositoryHost, type dataHost, type dataUsers } from '../api/domain'
 
 interface config {
@@ -23,7 +23,7 @@ export class RepositoryPostgreSQL implements RepositoryHost {
       username: config.username,
       password: config.password,
       database: config.database,
-      entities: [HostEntity, UserEntity],
+      entities: [HostEntity, PlayerEntity],
       synchronize: true,
       logging: false
     })
@@ -33,8 +33,8 @@ export class RepositoryPostgreSQL implements RepositoryHost {
     })
   }
 
-  async getListTable (table: 'host' | 'users'): Promise<ResponseData> {
-    const repository = this.db.getRepository(table === 'host' ? HostEntity : UserEntity)
+  async getListTable (table: 'host' | 'player'): Promise<ResponseData> {
+    const repository = this.db.getRepository(table === 'host' ? HostEntity : PlayerEntity)
     const result = await repository.find()
     if (result.length === 0) return { data: undefined, message: 'No data found' }
     return { data: result, message: 'Data found' }
@@ -59,19 +59,19 @@ export class RepositoryPostgreSQL implements RepositoryHost {
   }
 
   async insertUser (user: dataUsers): Promise<ResponseData> {
-    const repository = this.db.getRepository(UserEntity)
+    const repository = this.db.getRepository(PlayerEntity)
     await repository.insert(user)
     return { data: user, message: 'User inserted' }
   }
 
   async updateUser (user: dataUsers): Promise<ResponseData> {
-    const repository = this.db.getRepository(UserEntity)
+    const repository = this.db.getRepository(PlayerEntity)
     await repository.update({ ip: user.ip }, user)
     return { data: user, message: 'User updated' }
   }
 
   async deleteUser (ip: string): Promise<ResponseData> {
-    const repository = this.db.getRepository(UserEntity)
+    const repository = this.db.getRepository(PlayerEntity)
     await repository.delete({ ip })
     return { data: undefined, message: 'User deleted' }
   }

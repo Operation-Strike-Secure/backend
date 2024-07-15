@@ -3,9 +3,11 @@ ALTER TYPE public.stateGame RENAME TO host_state_enum;
 
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
-  ip text NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  last_connection TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  user_id text NOT NULL,
+  external_id text NULL,
+  email text NOT NULL,
+  password text NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS host (
@@ -23,11 +25,18 @@ CREATE TABLE IF NOT EXISTS ticket (
   message text NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   state BOOLEAN DEFAULT TRUE
-)
+);
 
 CREATE TABLE IF NOT EXISTS response (
   id SERIAL PRIMARY KEY,
   message text NOT NULL,
   ticket_id integer NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
+
+CREATE TABLE IF NOT EXISTS player (
+  id SERIAL PRIMARY KEY,
+  ip text NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  last_connection TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

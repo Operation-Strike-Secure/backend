@@ -27,7 +27,7 @@ export interface ResponseData {
 }
 
 export interface RepositoryHost {
-  getListTable: (table: 'host' | 'users') => Promise<ResponseData>
+  getListTable: (table: 'host' | 'player') => Promise<ResponseData>
   insertHost: (host: dataHost) => Promise<ResponseData>
   insertUser: (user: dataUsers) => Promise<ResponseData>
   updateHost: (host: dataHost) => Promise<ResponseData>
