@@ -4,9 +4,9 @@ ALTER TYPE public.stateGame RENAME TO host_state_enum;
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   user_id text NOT NULL,
-  external_id text NULL,
   email text NOT NULL,
   password text NOT NULL,
+  is_admin BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS ticket (
   title text NOT NULL,
   message text NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  state BOOLEAN DEFAULT TRUE
+  state BOOLEAN DEFAULT TRUE,
+  creator_id text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS response (

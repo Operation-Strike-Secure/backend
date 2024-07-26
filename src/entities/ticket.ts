@@ -14,6 +14,9 @@ export class TicketEntity extends BaseEntity {
   @Column({ default: true })
   state: boolean;
 
+  @Column()
+  creator_id: string;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 }

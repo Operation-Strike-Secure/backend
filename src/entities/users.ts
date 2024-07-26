@@ -9,13 +9,13 @@ export class UsersEntity extends BaseEntity {
     user_id: string
 
     @Column()
-    external_id: string
-
-    @Column()
     email: string
 
     @Column()
     password: string
+
+    @Column({ default: true })
+    is_admin: boolean
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date
