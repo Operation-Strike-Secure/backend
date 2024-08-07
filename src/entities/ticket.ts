@@ -1,22 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
 
 @Entity({ name: 'ticket' })
 export class TicketEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+    id: number
 
   @Column()
-  title: string;
+    title: string
 
   @Column()
-  message: string;
+    message: string
 
   @Column({ default: true })
-  state: boolean;
+    state: boolean
 
   @Column()
-  creator_id: string;
+    creator_id: string
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
+    created_at: Date
 }

@@ -8,13 +8,13 @@ export class UsersEntity extends BaseEntity {
   @Column()
     user_id: string
 
-    @Column()
+  @Column()
     email: string
 
-    @Column()
+  @Column()
     password: string
 
-    @Column({ default: true })
+  @Column({ default: true })
     is_admin: boolean
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
