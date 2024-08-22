@@ -1,8 +1,8 @@
 import 'reflect-metadata'
-import { DataSource, ReturningStatementNotSupportedError } from 'typeorm'
-import { RepositoryAuth } from '../api/domain'
+import { DataSource } from 'typeorm'
+import { type RepositoryAuth } from '../api/domain'
 import { UsersEntity } from '../../entities/users'
-import { hashPassword, comparePassword} from '../../utils/hash'
+import { hashPassword, comparePassword } from '../../utils/hash'
 
 interface config {
   host: string
@@ -32,32 +32,31 @@ export class RepositoryPostgreSQL implements RepositoryAuth {
       console.error('Error initializing the database', error)
     })
   }
-  async admin_connection(identification: string, password: string): Promise <any> {
-    const get_RepositoryAuth = this.db.getRepository(UsersEntity)
-    const response_db = await get_RepositoryAuth.findOneBy({email: identification, is_admin: true})
-    if (response_db && comparePassword(password, response_db.password)) {
-      console.log("connection ADMIN" + response_db)
-      return {identification}
-    }
-    return undefined
-  }
-  async user_connection(identification: string, password: string): Promise <any> {
-    const get_RepositoryAuth = this.db.getRepository(UsersEntity)
-    const response_db = await get_RepositoryAuth.findOneBy({email: identification, is_admin: false})
 
-    if (response_db && comparePassword(password, response_db.password)) {
-      console.log("connection USER" + response_db)
-      return {identification}
+  async admin_connection (identification: string, password: string): Promise <any> {
+    const getRepositoryAuth = this.db.getRepository(UsersEntity)
+    const responseBD = await getRepositoryAuth.findOneBy({ email: identification, is_admin: true })
+    if (responseBD !== null && comparePassword(password, responseBD.password)) {
+      return { identification }
     }
     return undefined
   }
 
-  async admin_register(identification: string, password: string): Promise<any> {
-    const get_RepositoryAuth = this.db.getRepository(UsersEntity)
-    const response_db = await get_RepositoryAuth.findOneBy({email: identification})
+  async user_connection (identification: string, password: string): Promise <any> {
+    const getRepositoryAuth = this.db.getRepository(UsersEntity)
+    const responseDB = await getRepositoryAuth.findOneBy({ email: identification, is_admin: false })
 
-    if (response_db != null) {
-      console.log("déjà connecté ADMIN" + response_db)
+    if (responseDB !== null && comparePassword(password, responseDB.password)) {
+      return { identification }
+    }
+    return undefined
+  }
+
+  async admin_register (identification: string, password: string): Promise<any> {
+    const getRepositoryAuth = this.db.getRepository(UsersEntity)
+    const responseDB = await getRepositoryAuth.findOneBy({ email: identification })
+
+    if (responseDB !== null) {
       return undefined
     }
 
@@ -68,15 +67,14 @@ export class RepositoryPostgreSQL implements RepositoryAuth {
     insert.is_admin = true
 
     await this.db.manager.save(insert)
-    return {identification}
-  }  
+    return { identification }
+  }
 
-  async user_register(identification: string, password: string): Promise <any> {
-    const get_RepositoryAuth = this.db.getRepository(UsersEntity)
-    const response_db = await get_RepositoryAuth.findOneBy({email: identification})
+  async user_register (identification: string, password: string): Promise <any> {
+    const getRepositoryAuth = this.db.getRepository(UsersEntity)
+    const responseDB = await getRepositoryAuth.findOneBy({ email: identification })
 
-    if (response_db) {
-      console.log("déjà connecté USER" + response_db)
+    if (responseDB !== null) {
       return undefined
     }
 
@@ -86,6 +84,6 @@ export class RepositoryPostgreSQL implements RepositoryAuth {
     insert.user_id = identification
 
     await this.db.manager.save(insert)
-    return {identification}
+    return { identification }
   }
 }

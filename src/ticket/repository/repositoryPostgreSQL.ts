@@ -33,43 +33,42 @@ export class RepositoryPostgreSQL implements RepositoryTicket {
     })
   }
 
-  async get(name: "ticket" | "response") : Promise<any> {
-    const get_repository = this.db.getRepository(name === "ticket"? TicketEntity : ResponseEntity)
-    const response_db = await get_repository.find()
-    if (response_db.length == 0)
-      return undefined
-    return response_db
+  async get (name: 'ticket' | 'response'): Promise<any> {
+    const getRepository = this.db.getRepository(name === 'ticket' ? TicketEntity : ResponseEntity)
+    const responseDB = await getRepository.find()
+    if (responseDB.length === 0) { return undefined }
+    return responseDB
   }
 
-  async insert_ticket(title: string, message: string) : Promise<any> {
+  async insert_ticket (title: string, message: string): Promise<any> {
     const insert = new TicketEntity()
     insert.title = title
     insert.message = message
     await this.db.manager.save(insert)
-    return {title, message}
+    return { title, message }
   }
 
-  async update_state(id: number, state: 'true' | 'false'): Promise<TicketEntity | null> {
-    const get_repository = this.db.getRepository(TicketEntity);
-    const ticket = await get_repository.findOneBy({ id });
+  async update_state (id: number, state: 'true' | 'false'): Promise<TicketEntity | null> {
+    const getRepository = this.db.getRepository(TicketEntity)
+    const ticket = await getRepository.findOneBy({ id })
 
-    if (ticket) {
-      ticket.state = state === 'true';
-      await get_repository.save(ticket);
-      return ticket;
+    if (ticket !== null) {
+      ticket.state = state === 'true'
+      await getRepository.save(ticket)
+      return ticket
     }
-    return null;
+    return null
   }
 
-  async response_ticket(id: number, message: string): Promise<any> {
+  async response_ticket (id: number, message: string): Promise<any> {
     const response = new ResponseEntity()
-    const ticketRepository = this.db.getRepository(TicketEntity);
-    const ticket = await ticketRepository.findOneBy({ id });
-    if (ticket) {
-      response.message = message;
+    const ticketRepository = this.db.getRepository(TicketEntity)
+    const ticket = await ticketRepository.findOneBy({ id })
+    if (ticket !== null) {
+      response.message = message
       response.ticket_id = id
       await this.db.manager.save(response)
-      return {id, message};
+      return { id, message }
     }
     return null
   }
