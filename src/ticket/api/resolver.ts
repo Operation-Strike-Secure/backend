@@ -1,8 +1,9 @@
 import { type RepositoryTicket } from './domain'
 
-export async function resolverGetTicketList (database: RepositoryTicket): Promise<any[] | undefined> {
+export async function resolverGetTicketList (database: RepositoryTicket, id: string): Promise<any[] | undefined> {
   const result = await database.get('ticket')
-  return result
+  const filteredResult = result.filter((res: any)  => res.ticket.id === id); // ICI
+  return filteredResult;
 }
 
 export async function resolverReponseList (database: RepositoryTicket, id: number): Promise<any[] | undefined> {
