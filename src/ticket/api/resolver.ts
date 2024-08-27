@@ -10,8 +10,8 @@ export async function resolverReponseList (database: RepositoryTicket, id: numbe
   return result.filter((res: any) => res.ticket_id === id)
 }
 
-export async function resolverInsertTicket (database: RepositoryTicket, title: string, message: string): Promise<any[] | undefined> {
-  const result = await database.insert_ticket(title, message)
+export async function resolverInsertTicket (database: RepositoryTicket, title: string, message: string, user_id: string): Promise<any[] | undefined> {
+  const result = await database.insert_ticket(title, message, user_id)
   return result
 }
 

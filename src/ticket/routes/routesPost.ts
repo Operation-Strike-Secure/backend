@@ -7,8 +7,8 @@ const routerPostTicket = express.Router()
 const database = new RepositoryPostgreSQL(configDatabase.Postgres)
 
 routerPostTicket.post('/postInsertTicket', (req: express.Request, res: express.Response) => {
-  const { title, message }: { title: string, message: string } = req.body
-  resolverInsertTicket(database, title, message).then((result: any) => {
+  const { title, message, user_id }: { title: string, message: string, user_id: string } = req.body
+  resolverInsertTicket(database, title, message, user_id).then((result: any) => {
     if (result === undefined) {
       res.status(404).send('No data found')
     } else {

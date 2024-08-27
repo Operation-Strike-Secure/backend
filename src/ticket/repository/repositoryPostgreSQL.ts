@@ -40,10 +40,11 @@ export class RepositoryPostgreSQL implements RepositoryTicket {
     return responseDB
   }
 
-  async insert_ticket (title: string, message: string): Promise<any> {
+  async insert_ticket (title: string, message: string, id: string): Promise<any> {
     const insert = new TicketEntity()
     insert.title = title
     insert.message = message
+    insert.creator_id = id
     await this.db.manager.save(insert)
     return { title, message }
   }
