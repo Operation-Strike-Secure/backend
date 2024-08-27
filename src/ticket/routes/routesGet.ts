@@ -7,7 +7,9 @@ const routerGetTicket = express.Router()
 const database = new RepositoryPostgreSQL(configDatabase.Postgres)
 
 routerGetTicket.get('/getTicketList', (req: express.Request, res: express.Response) => {
-  resolverGetTicketList(database).then((result: any) => {
+  const { id }: { id: string } = req.body                                                          // ICI
+  const ticketId = req.params.id;                                                                  // ICI
+  resolverGetTicketList(database, ticketId).then((result: any) => {                                // ICI
     if (result === undefined) {
       res.status(404).send('No data found')
     } else {
