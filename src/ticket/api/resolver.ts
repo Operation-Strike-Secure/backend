@@ -1,8 +1,14 @@
 import { type RepositoryTicket } from './domain'
 
-export async function resolverGetTicketList (database: RepositoryTicket, id: string): Promise<any[] | undefined> {
+export async function resolverGetTicketList (database: RepositoryTicket): Promise<any[] | undefined> {
   const result = await database.get('ticket')
-  const filteredResult = result.filter((res: any)  => res.ticket.id === id); // ICI
+  return result;
+}
+
+export async function resolverGetTicketListById (database: RepositoryTicket, id: string): Promise<any[] | undefined> {
+  const result = await database.get('ticket')
+  console.log(result)
+  const filteredResult = result.filter((res: any)  => res.creator_id === id)??[];
   return filteredResult;
 }
 
