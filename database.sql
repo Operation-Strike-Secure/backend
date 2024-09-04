@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS response (
   id SERIAL PRIMARY KEY,
   message text NOT NULL,
   ticket_id integer NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  creator_id text NULL
 );
 
 CREATE TABLE IF NOT EXISTS player (

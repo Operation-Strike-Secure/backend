@@ -11,6 +11,9 @@ export class ResponseEntity extends BaseEntity {
   @Column()
     message: string
 
+  @Column({default: null})
+    creator_id: string
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date
 }

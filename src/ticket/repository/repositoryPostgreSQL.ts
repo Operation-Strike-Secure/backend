@@ -61,13 +61,14 @@ export class RepositoryPostgreSQL implements RepositoryTicket {
     return null
   }
 
-  async response_ticket (id: number, message: string): Promise<any> {
+  async response_ticket (id: number, message: string, creator_id: string): Promise<any> {
     const response = new ResponseEntity()
     const ticketRepository = this.db.getRepository(TicketEntity)
     const ticket = await ticketRepository.findOneBy({ id })
     if (ticket !== null) {
       response.message = message
       response.ticket_id = id
+      response.creator_id = creator_id
       await this.db.manager.save(response)
       return { id, message }
     }
