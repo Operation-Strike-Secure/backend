@@ -101,22 +101,22 @@ export async function resolverGetAllStat (database: RepositoryHost): Promise<All
   const lastDayStats = groupByHour(hostList.filter(hostItem => {
     const createdAt = new Date(hostItem.created_at)
     return createdAt >= startDateDay && createdAt < endDate
-  }))
+  }), startDateDay, endDate)
 
   const lastWeekStats = groupByDay(hostList.filter(hostItem => {
     const createdAt = new Date(hostItem.created_at)
     return createdAt >= startDateWeek && createdAt < endDate
-  }))
+  }), startDateWeek, endDate)
 
   const lastMonthStats = groupByDay(hostList.filter(hostItem => {
     const createdAt = new Date(hostItem.created_at)
     return createdAt >= startDateMonth && createdAt < endDate
-  }))
+  }), startDateMonth, endDate)
 
   return { lastDay: lastDayStats, lastWeek: lastWeekStats, lastMonth: lastMonthStats }
 }
 
-function groupByHour (data: dataHost[]): Array<{ date: string, value: number }> {
+function groupByHour (data: dataHost[], startDate: Date, endDate: Date): Array<{ date: string, value: number }> {
   const grouped = data.reduce<Record<string, number>>((acc, curr) => {
     const hour = new Date(curr.created_at).getHours()
     const dateKey = `${new Date(curr.created_at).toISOString().split('T')[0]}T${hour}:00:00Z`
@@ -130,10 +130,17 @@ function groupByHour (data: dataHost[]): Array<{ date: string, value: number }> 
     return acc
   }, {})
 
-  return Object.entries(grouped).map(([date, value]) => ({ date, value }))
+  const result: Array<{ date: string, value: number }> = []
+
+  for (let d = new Date(startDate); d < endDate; d.setHours(d.getHours() + 1)) {
+    const hourKey = `${d.toISOString().split('T')[0]}T${d.getHours()}:00:00Z`
+    result.push({ date: hourKey, value: grouped[hourKey] || 0 })
+  }
+
+  return result
 }
 
-function groupByDay (data: dataHost[]): Array<{ date: string, value: number }> {
+function groupByDay (data: dataHost[], startDate: Date, endDate: Date): Array<{ date: string, value: number }> {
   const grouped = data.reduce<Record<string, number>>((acc, curr) => {
     const day = new Date(curr.created_at).toISOString().split('T')[0]
 
@@ -146,5 +153,12 @@ function groupByDay (data: dataHost[]): Array<{ date: string, value: number }> {
     return acc
   }, {})
 
-  return Object.entries(grouped).map(([date, value]) => ({ date, value }))
+  const result: Array<{ date: string, value: number }> = []
+
+  for (let d = new Date(startDate); d < endDate; d.setDate(d.getDate() + 1)) {
+    const dayKey = d.toISOString().split('T')[0]
+    result.push({ date: dayKey, value: grouped[dayKey] || 0 })
+  }
+
+  return result
 }
