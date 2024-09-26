@@ -35,7 +35,7 @@ routerPostTicket.post('/postDisplayReponse', (req: express.Request, res: express
 // TEST
 
 routerPostTicket.post('/postDisplayReponse/:id', (req: express.Request, res: express.Response) => {
-  const user_id = req.params.id;
+  const user_id = req.params.id
   const { id }: { id: number } = req.body
   resolverReponseListById(database, id, user_id).then((result: any) => {
     if (result === undefined) {

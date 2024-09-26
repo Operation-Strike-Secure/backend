@@ -4,6 +4,7 @@ ALTER TYPE public.stateGame RENAME TO host_state_enum;
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   user_id text NOT NULL,
+  username text NOT NULL,
   email text NOT NULL,
   password text NOT NULL,
   is_admin BOOLEAN DEFAULT FALSE,

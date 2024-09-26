@@ -1,7 +1,7 @@
 import express from 'express'
 import { configDatabase } from '../../../config/envConfig'
-import { type dataHost } from '../api/domain'
-import { resolverGetIdUser, resolverGetListTableHost, resolverGetNumberParty } from '../api/resolver'
+import { type AllDataStat, type dataHost } from '../api/domain'
+import { resolverGetAllStat, resolverGetIdUser, resolverGetListTableHost, resolverGetNumberParty } from '../api/resolver'
 import { RepositoryPostgreSQL } from '../repository/repositoryPostgreSQL'
 
 const routerGetHost = express.Router()
@@ -95,6 +95,14 @@ routerGetHost.get('/getNumberParty', (req: express.Request, res: express.Respons
     } else {
       res.status(200).json(result)
     }
+  }).catch((error) => {
+    res.status(500).send(error)
+  })
+})
+
+routerGetHost.get('/stat/getAllData', (req: express.Request, res: express.Response) => {
+  resolverGetAllStat(database).then((result: AllDataStat) => {
+    res.status(200).json(result)
   }).catch((error) => {
     res.status(500).send(error)
   })

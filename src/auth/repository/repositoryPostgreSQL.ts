@@ -33,57 +33,59 @@ export class RepositoryPostgreSQL implements RepositoryAuth {
     })
   }
 
-  async admin_connection (identification: string, password: string): Promise <any> {
+  async admin_connection (identification: string, password: string): Promise <{ email: string, is_admin: boolean, id: number }> {
     const getRepositoryAuth = this.db.getRepository(UsersEntity)
     const responseBD = await getRepositoryAuth.findOneBy({ email: identification, is_admin: true })
     if (responseBD !== null && comparePassword(password, responseBD.password)) {
-      return { identification }
+      return { email: responseBD.email, is_admin: responseBD.is_admin, id: responseBD.id }
     }
-    return undefined
+    throw new Error('User not found')
   }
 
-  async user_connection (identification: string, password: string): Promise <any> {
+  async user_connection (identification: string, password: string): Promise <{ email: string, is_admin: boolean, id: number }> {
     const getRepositoryAuth = this.db.getRepository(UsersEntity)
     const responseDB = await getRepositoryAuth.findOneBy({ email: identification, is_admin: false })
 
     if (responseDB !== null && comparePassword(password, responseDB.password)) {
-      return { identification }
+      return { email: responseDB.email, is_admin: responseDB.is_admin, id: responseDB.id }
     }
-    return undefined
+    throw new Error('User not found')
   }
 
-  async admin_register (identification: string, password: string): Promise<any> {
+  async admin_register (identification: string, password: string, username: string): Promise <{ email: string, is_admin: boolean, id: number }> {
     const getRepositoryAuth = this.db.getRepository(UsersEntity)
     const responseDB = await getRepositoryAuth.findOneBy({ email: identification })
 
     if (responseDB !== null) {
-      return undefined
+      throw new Error('User already exists')
     }
 
     const insert = new UsersEntity()
     insert.email = identification
     insert.password = hashPassword(password)
+    insert.username = username
     insert.user_id = identification
     insert.is_admin = true
 
     await this.db.manager.save(insert)
-    return { identification }
+    return { email: insert.email, is_admin: insert.is_admin, id: insert.id }
   }
 
-  async user_register (identification: string, password: string): Promise <any> {
+  async user_register (identification: string, password: string, username: string): Promise <{ email: string, is_admin: boolean, id: number }> {
     const getRepositoryAuth = this.db.getRepository(UsersEntity)
     const responseDB = await getRepositoryAuth.findOneBy({ email: identification })
 
     if (responseDB !== null) {
-      return undefined
+      throw new Error('User already exists')
     }
 
     const insert = new UsersEntity()
     insert.email = identification
     insert.password = hashPassword(password)
     insert.user_id = identification
+    insert.username = username
 
     await this.db.manager.save(insert)
-    return { identification }
+    return { email: insert.email, is_admin: insert.is_admin, id: insert.id }
   }
 }

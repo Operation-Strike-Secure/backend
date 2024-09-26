@@ -19,13 +19,13 @@ routerGetTicket.get('/getTicketList', (req: express.Request, res: express.Respon
 })
 
 routerGetTicket.get('/getTicketList/:id', (req: express.Request, res: express.Response) => {
-  const ticketId = req.params.id;
+  const ticketId = req.params.id
   resolverGetTicketListById(database, ticketId).then((result: any) => {
     if (result === undefined) {
       res.status(404).send('No data found')
     } else {
       res.status(200).json(result)
-     }
+    }
   }).catch((error) => {
     res.status(500).send(error)
   })

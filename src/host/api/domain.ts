@@ -26,6 +26,12 @@ export interface ResponseData {
   message: string
 }
 
+export interface AllDataStat {
+  lastDay: Array<{ value: number, date: string }>
+  lastWeek: Array<{ value: number, date: string }>
+  lastMonth: Array<{ value: number, date: string }>
+}
+
 export interface RepositoryHost {
   getListTable: (table: 'host' | 'player') => Promise<ResponseData>
   insertHost: (host: dataHost) => Promise<ResponseData>

@@ -1,5 +1,5 @@
 import { convertEnumStateGame } from '../../utils/convert'
-import { host_state_enum, type RepositoryHost, type dataHost, type dataUsers } from './domain'
+import { type AllDataStat, host_state_enum, type RepositoryHost, type dataHost, type dataUsers } from './domain'
 
 export async function resolverGetListTableHost (database: RepositoryHost): Promise<dataHost[] | undefined> {
   const result = await database.getListTable('host')
@@ -83,4 +83,68 @@ export async function resolverGetNumberParty (database: RepositoryHost): Promise
   }
 
   return { nb_party: hostList.length, nb_party_ended: hostPartiesEnded.length }
+}
+
+export async function resolverGetAllStat (database: RepositoryHost): Promise<AllDataStat> {
+  const result = await database.getListTable('host')
+  const hostList = result.data as dataHost[] | undefined
+
+  if (hostList === undefined || hostList.length === 0) {
+    return { lastDay: [], lastWeek: [], lastMonth: [] }
+  }
+
+  const endDate = new Date()
+  const startDateDay = new Date(endDate.getTime() - (24 * 60 * 60 * 1000))
+  const startDateWeek = new Date(endDate.getTime() - (7 * 24 * 60 * 60 * 1000))
+  const startDateMonth = new Date(endDate.getTime() - (30 * 24 * 60 * 60 * 1000))
+
+  const lastDayStats = groupByHour(hostList.filter(hostItem => {
+    const createdAt = new Date(hostItem.created_at)
+    return createdAt >= startDateDay && createdAt < endDate
+  }))
+
+  const lastWeekStats = groupByDay(hostList.filter(hostItem => {
+    const createdAt = new Date(hostItem.created_at)
+    return createdAt >= startDateWeek && createdAt < endDate
+  }))
+
+  const lastMonthStats = groupByDay(hostList.filter(hostItem => {
+    const createdAt = new Date(hostItem.created_at)
+    return createdAt >= startDateMonth && createdAt < endDate
+  }))
+
+  return { lastDay: lastDayStats, lastWeek: lastWeekStats, lastMonth: lastMonthStats }
+}
+
+function groupByHour (data: dataHost[]): Array<{ date: string, value: number }> {
+  const grouped = data.reduce<Record<string, number>>((acc, curr) => {
+    const hour = new Date(curr.created_at).getHours()
+    const dateKey = `${new Date(curr.created_at).toISOString().split('T')[0]}T${hour}:00:00Z`
+
+    if (!acc[dateKey]) {
+      acc[dateKey] = 0
+    }
+
+    acc[dateKey] += curr.nb_players ?? 0
+
+    return acc
+  }, {})
+
+  return Object.entries(grouped).map(([date, value]) => ({ date, value }))
+}
+
+function groupByDay (data: dataHost[]): Array<{ date: string, value: number }> {
+  const grouped = data.reduce<Record<string, number>>((acc, curr) => {
+    const day = new Date(curr.created_at).toISOString().split('T')[0]
+
+    if (!acc[day]) {
+      acc[day] = 0
+    }
+
+    acc[day] += curr.nb_players ?? 0
+
+    return acc
+  }, {})
+
+  return Object.entries(grouped).map(([date, value]) => ({ date, value }))
 }

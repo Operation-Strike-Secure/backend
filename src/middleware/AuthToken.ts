@@ -3,11 +3,12 @@ import jwt_decode from 'jwt-decode'
 import { responseData } from '../utils/constant'
 import jwt from 'jsonwebtoken'
 
-export function createToken (id: string, email: string): string {
+export function createToken (id: string, email: string, isAdmin: boolean): string {
   const payload = {
     data: {
       id,
-      email
+      email,
+      isAdmin
     }
   }
   return jwt.sign(payload, process.env.JWT_SECRET ?? 'secret', {
